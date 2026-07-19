@@ -1,0 +1,29 @@
+package com.Energy.device_service.controller;
+
+import com.Energy.device_service.Dto.DeviceDto;
+import com.Energy.device_service.Service.DeviceService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/device")
+
+public class DeviceController {
+    private DeviceService deviceService ;
+
+    public DeviceController(DeviceService deviceService){
+        this.deviceService = deviceService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DeviceDto> getDeviceById(@PathVariable Long id){
+        DeviceDto device = deviceService.getDeviceById(id);
+        return ResponseEntity.ok(device);
+    }
+    @PostMapping("/create")
+    public ResponseEntity<DeviceDto> createDevice(@RequestBody DeviceDto deviceDto){
+        DeviceDto createdDevice = deviceService.createDevice(deviceDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDevice);
+}
+    }
