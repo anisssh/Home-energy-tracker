@@ -2,6 +2,7 @@ package com.Energy.device_service.Service;
 
 import com.Energy.device_service.Dto.DeviceDto;
 import com.Energy.device_service.Entity.Device;
+import com.Energy.device_service.Exceptions.DeviceNotFound;
 import com.Energy.device_service.Repository.DeviceRepository;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class DeviceService
     public DeviceDto updateDevice(Long id, DeviceDto input) {
         Device existing = deviceRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Device not found with id " + id));
+                        new DeviceNotFound("Device not found with id " + id));
 
         existing.setName(input.getName());
         existing.setType(input.getType());
@@ -55,4 +56,10 @@ public class DeviceService
         return mapToDto(updatedDevice);
     }
 
+    public void deleteDevice(Long id) {
+        if (!deviceRepository.existsById(id)) {
+            throw new DeviceNotFound("Device not found with id " + id);
+        }
+        deviceRepository.deleteById(id);
+    }
 }
